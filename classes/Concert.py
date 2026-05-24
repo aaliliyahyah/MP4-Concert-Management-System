@@ -4,7 +4,6 @@ from utils import (
     print_message,
     print_success,
     print_error,
-    display_attendees,
     display_durations,
     display_violations,
 )
