@@ -3,10 +3,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-from utils import fmt, build_df
+from utils import fmt, build_df, metric_card, metric_row, box_title, empty_state
 from datetime import datetime, timedelta
 import sys
 import os
+
 
 sys.path.insert(0, os.path.dirname(__file__))
 from classes import Concert
@@ -125,36 +126,6 @@ if "action_msg" not in st.session_state:
     st.session_state.action_msg = None
 if "action_type" not in st.session_state:
     st.session_state.action_type = None
-
-
-# ── Pure HTML helpers ─────────────────────────────────────────────────────────
-def metric_card(label, value, color=""):
-    return (
-        f'<div class="metric-card">'
-        f'<div class="label">{label}</div>'
-        f'<div class="value {color}">{value}</div>'
-        f"</div>"
-    )
-
-
-def metric_row(*cards):
-    st.markdown(
-        f'<div class="metric-row">{"".join(cards)}</div>', unsafe_allow_html=True
-    )
-
-
-def box_title(title):
-    st.markdown(f'<div class="box-title">{title}</div>', unsafe_allow_html=True)
-
-
-def empty_state(icon, text):
-    st.markdown(
-        f'<div class="empty-state">'
-        f'<div class="empty-icon">{icon}</div>'
-        f'<p class="empty-text">{text}</p>'
-        f"</div>",
-        unsafe_allow_html=True,
-    )
 
 
 # ════════════════════════════════════════════════════════════════════════════
