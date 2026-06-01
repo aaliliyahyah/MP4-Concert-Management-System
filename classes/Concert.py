@@ -19,10 +19,6 @@ from utils import (
 
 class Concert(Record):
     def __init__(self, **dur):
-        super().__init__()
-        self.duration = timedelta(hours=dur["hours"], minutes=dur["mins"], seconds=dur["secs"])
-
-    def __init__(self, **dur):
         super().__init__() 
         self.duration = timedelta(hours=dur["hours"], minutes=dur["mins"], seconds=dur["secs"])
         #Concert(hours = 2, mins = 30, secs = 0), timedelta(hours = 2) 
@@ -30,15 +26,16 @@ class Concert(Record):
     def pushAttendee(self, name: str = None):
         if name is None:
             name = print_input('Enter attendee name (or press Enter to cancel): ').strip()  
+
         if not name:
             return print_error("Push cancelled: name cannot be empty.")
-        existing_ids = [a.get("ticketID", 0) for a in self.record]
         
         # checking for double entry
         existing_names = [a["name"].lower() for a in self.record]
         if name.lower() in existing_names:
             return print_error(f"'{name}' is already registered in this concert.")
         
+        existing_ids = [a.get("ticketID", 0) for a in self.record]
         next_ticket = max(existing_ids) + 1 if existing_ids else 1
         attendee = {"ticketID": next_ticket, "name": name, "entryTime": datetime.now(), "exitTime": None}
         
@@ -86,7 +83,8 @@ class Concert(Record):
         for rec in self.record:
             end = rec["exitTime"] or datetime.now()
             attended = end - rec["entryTime"]
-            if attended > self.duration:
+
+            if attended > (self.duration + timedelta(minutes=1)):
                 violations.append((rec["ticketID"], rec["name"], "overstay"))
             elif rec["exitTime"] and attended < self.duration:
                 violations.append((rec["ticketID"], rec["name"], "early exit"))
