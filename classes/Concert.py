@@ -22,19 +22,31 @@ class Concert(Record):
         super().__init__()
         self.duration = timedelta(hours=dur["hours"], minutes=dur["mins"], seconds=dur["secs"])
 
+    def __init__(self, **dur):  #Concert(hours = 2, mins = 30, secs = 0) dur={"hours": 2, "mins": 30, "secs": 0}
+        super().__init__() 
+        self.duration = timedelta(hours=dur["hours"], minutes=dur["mins"], seconds=dur["secs"])
+        #Concert(hours = 2, mins = 30, secs = 0), timedelta(hours = 2) 
+    
     def pushAttendee(self, name: str = None):
         if name is None:
-            name = print_input('Enter attendee name (or press Enter to cancel): ').strip()
+            name = print_input('Enter attendee name (or press Enter to cancel): ').strip()  
         if not name:
             return print_error("Push cancelled: name cannot be empty.")
         existing_ids = [a.get("ticketID", 0) for a in self.record]
+        
+        # checking for double entry
+        existing_names = [a["name"].lower() for a in self.record]
+        if name.lower() in existing_names:
+            return print_error(f"'{name}' is already registered in this concert.")
+        
         next_ticket = max(existing_ids) + 1 if existing_ids else 1
         attendee = {"ticketID": next_ticket, "name": name, "entryTime": datetime.now(), "exitTime": None}
-
+        
         self.attendees.append(attendee)
         self.record.append(attendee)
         print_success(f"{name} entered. Ticket: {next_ticket}")
         return attendee
+
 
     def popAttendee(self):
         if self._isAttendanceEmpty():
