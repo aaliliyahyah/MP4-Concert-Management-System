@@ -22,7 +22,7 @@ class Concert(Record):
         super().__init__()
         self.duration = timedelta(hours=dur["hours"], minutes=dur["mins"], seconds=dur["secs"])
 
-    def __init__(self, **dur):  #Concert(hours = 2, mins = 30, secs = 0) dur={"hours": 2, "mins": 30, "secs": 0}
+    def __init__(self, **dur):
         super().__init__() 
         self.duration = timedelta(hours=dur["hours"], minutes=dur["mins"], seconds=dur["secs"])
         #Concert(hours = 2, mins = 30, secs = 0), timedelta(hours = 2) 

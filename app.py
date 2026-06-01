@@ -248,12 +248,18 @@ with tab1:
     if push_clicked:
         stripped = name_input.strip()
         if stripped:
-            result = concert.pushAttendee(name=stripped)
-            if result:
-                st.session_state.action_msg = (
-                    f"✓ {result['name']} entered — Ticket #{result['ticketID']}"
-                )
-                st.session_state.action_type = "success"
+            # Check for duplicate name before calling pushAttendee
+            existing_names = [a["name"].lower() for a in concert.record]
+            if stripped.lower() in existing_names:
+                st.session_state.action_msg = f"'{stripped}' is already registered in this concert."
+                st.session_state.action_type = "error"
+            else:
+                result = concert.pushAttendee(name=stripped)
+                if result:
+                    st.session_state.action_msg = (
+                        f"✓ {result['name']} entered — Ticket #{result['ticketID']}"
+                    )
+                    st.session_state.action_type = "success"
         else:
             st.session_state.action_msg = "Name cannot be empty."
             st.session_state.action_type = "error"
